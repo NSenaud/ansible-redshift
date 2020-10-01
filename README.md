@@ -4,7 +4,7 @@ Module to manage Redshift:
  - Users
  - Groups
  - Privileges on databases, schemas and tables
- 
+
 This module is inspired by the postgresql_user core module of Ansible, but uses the SQL syntax needed by Redshift.
 
 ## Dependencies
@@ -18,26 +18,26 @@ The machine targeted by Ansible needs to have installed:
 |                     | Function                         | Note                                        |
 | ------------------- | -------------------------------- | ------------------------------------------- |
 | :white_check_mark:  | Create Users / Groups            |                                             |
-| :white_check_mark:  | Delete Users / Groups            |                                             |                                      
-| :white_check_mark:  | Set / Revoke SUPERUSER           |                                             |                                      
+| :white_check_mark:  | Delete Users / Groups            |                                             |
+| :white_check_mark:  | Set / Revoke SUPERUSER           |                                             |
 | :white_check_mark:  | Associate User and Group         | Only 1:1, see *Assign an user to groups*    |
-| :warning:           | Schema / Table privileges        | No integration tests yet                    |   
+| :warning:           | Schema / Table privileges        | No integration tests yet                    |
 
 See [test/integration/](test/integration/) for details. Tested with Ansible 2.2.1 and Redshift Custer 1.0.1564.
- 
+
 ## Usage
 
 ### Installation
 
-Copy the provided Python script inside `/lib` into a location for Ansible libraries.
+Copy the provided Python script inside `/library` into a location for Ansible libraries.
 
 From the Ansible documentation:
 
 > This is the default location Ansible looks to find modules:
->    
+>
 >    library = /usr/share/ansible
 >
-> Ansible knows how to look in multiple locations if you feed it a colon separated path, and it also will 
+> Ansible knows how to look in multiple locations if you feed it a colon separated path, and it also will
 > look for modules in the ”./library” directory alongside a playbook.
 
 ### SSL support
@@ -49,10 +49,10 @@ The module uses by default a SSL connection, which can be turned of by setting `
 **Create a normal user**
 ```
 - redshift_user:
-    login_host: some-redshift.cluster.eu-central-1.redshift.amazonaws.com 
-    login_user: rs_master 
-    login_password: 123456Abcdef 
-    db: my_database 
+    login_host: some-redshift.cluster.eu-central-1.redshift.amazonaws.com
+    login_user: rs_master
+    login_password: 123456Abcdef
+    db: my_database
     user: new_rs_user
     password: passwF0rN3wRsUser
     expires: '2017-01-01 00:00'
@@ -65,12 +65,12 @@ The module uses by default a SSL connection, which can be turned of by setting `
 
 ```
 - redshift_user:
-    login_host: some-redshift.cluster.eu-central-1.redshift.amazonaws.com 
-    login_user: rs_master 
-    login_password: 123456Abcdef 
-    db: my_database 
+    login_host: some-redshift.cluster.eu-central-1.redshift.amazonaws.com
+    login_user: rs_master
+    login_password: 123456Abcdef
+    db: my_database
     user: new_rs_user
-    password: passwF0rN3wRsUser 
+    password: passwF0rN3wRsUser
     permission_flags:
         - SUPERUSER
 ```
@@ -79,12 +79,12 @@ The module uses by default a SSL connection, which can be turned of by setting `
 
 ```
 - redshift_user:
-    login_host: some-redshift.cluster.eu-central-1.redshift.amazonaws.com 
-    login_user: rs_master 
-    login_password: 123456Abcdef 
-    db: my_database 
+    login_host: some-redshift.cluster.eu-central-1.redshift.amazonaws.com
+    login_user: rs_master
+    login_password: 123456Abcdef
+    db: my_database
     user: new_rs_user
-    password: passwF0rN3wRsUser 
+    password: passwF0rN3wRsUser
     permission_flags:
         - NOSUPERUSER
 ```
@@ -96,10 +96,10 @@ available anymore. To still be able to update other user attributes, use `update
 
 ```
 - redshift_user:
-    login_host: some-redshift.cluster.eu-central-1.redshift.amazonaws.com 
-    login_user: rs_master 
-    login_password: 123456Abcdef 
-    db: my_database 
+    login_host: some-redshift.cluster.eu-central-1.redshift.amazonaws.com
+    login_user: rs_master
+    login_password: 123456Abcdef
+    db: my_database
     user: new_rs_user
     password: any_value
     update_password: on_create
@@ -109,10 +109,10 @@ available anymore. To still be able to update other user attributes, use `update
 
 ```
 - redshift_user:
-    login_host: some-redshift.cluster.eu-central-1.redshift.amazonaws.com 
-    login_user: rs_master 
-    login_password: 123456Abcdef 
-    db: my_database 
+    login_host: some-redshift.cluster.eu-central-1.redshift.amazonaws.com
+    login_user: rs_master
+    login_password: 123456Abcdef
+    db: my_database
     group: new_rs_group
 ```
 
@@ -125,9 +125,9 @@ also the module only supports n:1 relationships of users and groups!
 
 ```
 - redshift_user:
-    login_host: some-redshift.cluster.eu-central-1.redshift.amazonaws.com 
-    login_user: rs_master 
-    login_password: 123456Abcdef 
+    login_host: some-redshift.cluster.eu-central-1.redshift.amazonaws.com
+    login_user: rs_master
+    login_password: 123456Abcdef
     db: my_database
     user: new_rs_user
     password: passwF0rN3wRsUser
@@ -138,13 +138,13 @@ also the module only supports n:1 relationships of users and groups!
 
 ```
 - redshift_user:
-    login_host: some-redshift.cluster.eu-central-1.redshift.amazonaws.com 
-    login_user: rs_master 
-    login_password: 123456Abcdef 
+    login_host: some-redshift.cluster.eu-central-1.redshift.amazonaws.com
+    login_user: rs_master
+    login_password: 123456Abcdef
     db: my_database
     user: new_rs_user
     password: passwF0rN3wRsUser
-    # no group given 
+    # no group given
     # state is implicit 'present' ('absent' would try to delete the user)
 ```
 
@@ -156,19 +156,19 @@ This is something you have to do manually at the moment!
 ```
 # remove user
 - redshift_user:
-    login_host: some-redshift.cluster.eu-central-1.redshift.amazonaws.com 
-    login_user: rs_master 
-    login_password: 123456Abcdef 
+    login_host: some-redshift.cluster.eu-central-1.redshift.amazonaws.com
+    login_user: rs_master
+    login_password: 123456Abcdef
     db: my_database
     user: new_rs_user
     password: passwF0rN3wRsUser
     state: absent
 
-# remove group    
+# remove group
 - redshift_user:
-    login_host: some-redshift.cluster.eu-central-1.redshift.amazonaws.com 
-    login_user: rs_master 
-    login_password: 123456Abcdef 
+    login_host: some-redshift.cluster.eu-central-1.redshift.amazonaws.com
+    login_user: rs_master
+    login_password: 123456Abcdef
     db: my_database
     group: new_rs_group
     state: absent
@@ -177,7 +177,7 @@ This is something you have to do manually at the moment!
 
 ### Privileges
 
-For all calls to grant / revoke privileges, the `state` parameter has to be set to *present* (default). 
+For all calls to grant / revoke privileges, the `state` parameter has to be set to *present* (default).
 An *absent* state will always trigger a deletion of an user or group!
 
 Refer also to the official AWS documentation how to set the privileges:
@@ -187,9 +187,9 @@ http://docs.aws.amazon.com/redshift/latest/dg/r_GRANT.html
 
 ```
 - redshift_user:
-    login_host: some-redshift.cluster.eu-central-1.redshift.amazonaws.com 
-    login_user: rs_master 
-    login_password: 123456Abcdef 
+    login_host: some-redshift.cluster.eu-central-1.redshift.amazonaws.com
+    login_user: rs_master
+    login_password: 123456Abcdef
     db: my_database
     user: new_rs_user
     password: passwF0rN3wRsUser
@@ -202,9 +202,9 @@ http://docs.aws.amazon.com/redshift/latest/dg/r_GRANT.html
 
 ```
 - redshift_user:
-    login_host: some-redshift.cluster.eu-central-1.redshift.amazonaws.com 
-    login_user: rs_master 
-    login_password: 123456Abcdef 
+    login_host: some-redshift.cluster.eu-central-1.redshift.amazonaws.com
+    login_user: rs_master
+    login_password: 123456Abcdef
     db: my_database
     user: new_rs_user
     password: passwF0rN3wRsUser
@@ -219,9 +219,9 @@ http://docs.aws.amazon.com/redshift/latest/dg/r_GRANT.html
 
 ```
 - redshift_user:
-    login_host: some-redshift.cluster.eu-central-1.redshift.amazonaws.com 
-    login_user: rs_master 
-    login_password: 123456Abcdef 
+    login_host: some-redshift.cluster.eu-central-1.redshift.amazonaws.com
+    login_user: rs_master
+    login_password: 123456Abcdef
     db: my_database
     group: rs_group
     privs:
@@ -231,15 +231,15 @@ http://docs.aws.amazon.com/redshift/latest/dg/r_GRANT.html
 ```
 
 *Note* Always use a extra statement for groups. If you set `user`, `group` and `privs` at the same time
-the privileges will be applied to the user. This setup allows you to assign the user to a group and give special 
+the privileges will be applied to the user. This setup allows you to assign the user to a group and give special
 user-privileges at the same time like in the following example:
 
 ```
 # This statement creates the group with priveleges
 - redshift_user:
-    login_host: some-redshift.cluster.eu-central-1.redshift.amazonaws.com 
-    login_user: rs_master 
-    login_password: 123456Abcdef 
+    login_host: some-redshift.cluster.eu-central-1.redshift.amazonaws.com
+    login_user: rs_master
+    login_password: 123456Abcdef
     db: my_database
     group: rs_group
     privs:
@@ -249,15 +249,15 @@ user-privileges at the same time like in the following example:
 
 # This statement creates a user, assign to the group and gives this user additionally access to rs_schema_c
 - redshift_user:
-    login_host: some-redshift.cluster.eu-central-1.redshift.amazonaws.com 
-    login_user: rs_master 
-    login_password: 123456Abcdef 
+    login_host: some-redshift.cluster.eu-central-1.redshift.amazonaws.com
+    login_user: rs_master
+    login_password: 123456Abcdef
     db: my_database
     user: new_rs_user
     group: rs_group
     privs:
         - rs_schema_c:USAGE/ALL:ALL
-    state: present    
+    state: present
 ```
 
 **Revoke rights**
@@ -266,9 +266,9 @@ user-privileges at the same time like in the following example:
 
 ```
 - redshift_user:
-    login_host: some-redshift.cluster.eu-central-1.redshift.amazonaws.com 
-    login_user: rs_master 
-    login_password: 123456Abcdef 
+    login_host: some-redshift.cluster.eu-central-1.redshift.amazonaws.com
+    login_user: rs_master
+    login_password: 123456Abcdef
     db: my_database
     group: rs_group
     privs:
@@ -279,7 +279,7 @@ user-privileges at the same time like in the following example:
 **Set rights on database level**
 
 Not supported in this module version (yet)
- 
+
 ## Developers FAQ
 
 **Why isn't this module using psycopg2 ?**
@@ -296,7 +296,7 @@ the library does not behave as expected, e.g. `cursor.rowcount` is not working.
 
 With release 0.2, the changed flag (also in dry-run) behaves like this:
 
-* *working* if `update_password: on_create` is set, else *always true* because the module can't compare the 
+* *working* if `update_password: on_create` is set, else *always true* because the module can't compare the
   existing and the new password
 * *always true* if `privs` are set
 
